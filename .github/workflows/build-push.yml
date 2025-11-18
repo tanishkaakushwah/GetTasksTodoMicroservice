@@ -14,8 +14,8 @@ jobs:
     env:
       IMAGE_NAME: todo-get-tasks-api
       IMAGE_TAG: v1
-      ACR_NAME: devopsinsidersacr235
-      ACR_LOGIN_SERVER: devopsinsidersacr235.azurecr.io
+      ACR_NAME: blibacr4829
+      ACR_LOGIN_SERVER: blibacr4829.azurecr.io
 
     steps:
       - name: Checkout code
@@ -24,9 +24,9 @@ jobs:
       - name: Azure Login
         uses: Azure/login@v2.3.0
         with:
-          client-id: ff27bcf6-f60c-4a57-8b01-8eee5de2a9cd
-          tenant-id: 0f7010fd-209e-4344-8457-043ffb37143b
-          subscription-id: 1075ec7a-b17a-4f37-bf3f-9d68c4506dc1
+          client-id: 29b5b410-5e74-4b95-a9e4-1d155855e944
+          tenant-id: c77566ed-d418-4a73-9140-4db6f3d115e6
+          subscription-id: c0748677-9808-4356-8816-dc8088c5bb59
 
       - name: Log in to ACR
         run: |
