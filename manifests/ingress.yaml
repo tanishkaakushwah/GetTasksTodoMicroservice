@@ -5,7 +5,7 @@ metadata:
 spec:
   ingressClassName: azure-application-gateway
   rules:
-  - host: get-tasks-api.jhandu.shop
+  - host: get-tasks-api.tanishka.store
     http:
       paths:
       - pathType: Prefix
