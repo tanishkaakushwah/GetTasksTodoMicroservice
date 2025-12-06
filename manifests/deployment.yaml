@@ -15,6 +15,7 @@ spec:
       containers:
       - name: todo-get-task-api
         image: blibacr4829.azurecr.io/todo-get-tasks-api:v1
+        imagePullPolicy: Always
         ports:
         - containerPort: 8000
         env: 
