@@ -2,6 +2,9 @@ import pyodbc
 from fastapi import FastAPI
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
+from prometheus_client import Counter, Histogram, generate_latest, CONTENT_TYPE_LATEST
+from starlette.responses import Response
+import time
 
 import os
 
@@ -15,6 +18,19 @@ else:
     print("Connection string not found in environment variables.")
     
 app = FastAPI()
+REQUEST_COUNT = Counter("http_requests_total", "Total HTTP requests", ["method", "endpoint"])
+REQUEST_LATENCY = Histogram("http_request_duration_seconds", "Request latency", ["endpoint"])
+
+@app.middleware("http")
+async def prometheus_middleware(request, call_next):
+    start_time = time.time()
+    response = await call_next(request)
+    duration = time.time() - start_time
+
+    REQUEST_COUNT.labels(request.method, request.url.path).inc()
+    REQUEST_LATENCY.labels(request.url.path).observe(duration)
+
+    return response
 
 # Configure CORSMiddleware to allow all origins (disable CORS for development)
 app.add_middleware(
@@ -84,6 +100,10 @@ def get_task(task_id: int):
             }
             return task
         return {"message": "Task not found"}
+
+@app.get("/metrics")
+def metrics():
+    return Response(generate_latest(), media_type=CONTENT_TYPE_LATEST)
 
 if __name__ == "__main__":
     create_tasks_table()
